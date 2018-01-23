@@ -1,0 +1,12 @@
+bootdelay=0
+ethaddr=C0:B1:3C:88:88:85
+ipaddr=192.168.201.123
+serverip=192.168.201.6
+loadaddr=0xC0007FC0
+envmaddr=0x8020000
+image=stm32f7/stm32f746g-disco_system.uImage
+update_spi=tftp ${image} && qspi erase 0 ${filesize} && qspi write ${loadaddr} 0 ${filesize}
+boot_spi=echo 'Booting from SPI...' && bootm 0x90000000
+boot_network=echo 'Booting from network...' && tftp ${image} && bootm
+bootargs=stm32_platform=stm32f7-disco console=ttyS5,115200 panic=3 console=tty0
+bootcmd=run boot_network
