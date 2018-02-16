@@ -1,0 +1,49 @@
+diff --git a/board/st/stm32f746-disco/stm32f746-disco.c b/board/st/stm32f746-disco/stm32f746-disco.c
+index 8da70281f9..8de1481630 100644
+--- a/board/st/stm32f746-disco/stm32f746-disco.c
++++ b/board/st/stm32f746-disco/stm32f746-disco.c
+@@ -137,10 +137,13 @@ int board_late_init(void)
+ 				   &gpio, GPIOD_IS_IN);
+ 
+ 	if (dm_gpio_is_valid(&gpio)) {
+-		if (dm_gpio_get_value(&gpio))
++		if (dm_gpio_get_value(&gpio)) {
++			env_set("button", "HIGH");
+ 			puts("usr button is at HIGH LEVEL\n");
+-		else
++		} else {
++			env_set("button", "LOW");
+ 			puts("usr button is at LOW LEVEL\n");
++		}
+ 	}
+ 
+ 	return 0;
+diff --git a/include/configs/stm32f746-disco.h b/include/configs/stm32f746-disco.h
+index e9a2649dd6..fed6712f0a 100644
+--- a/include/configs/stm32f746-disco.h
++++ b/include/configs/stm32f746-disco.h
+@@ -48,13 +48,20 @@
+ #define CONFIG_SYS_MALLOC_LEN		(1 * 1024 * 1024)
+ 
+ #define CONFIG_BOOTCOMMAND						\
+-	"run bootcmd_romfs"
++	"run conditionalboot"
+ 
+ #define CONFIG_ENV_VARS_UBOOT_CONFIG
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+-	"bootargs_romfs=uclinux.physaddr=0x08180000 root=/dev/mtdblock0\0" \
+-	"bootcmd_romfs=setenv bootargs ${bootargs} ${bootargs_romfs};" \
+-	"bootm 0x08044000 - 0x08042000\0"
++	"ipaddr=192.168.201.123\0" \
++	"serverip=192.168.201.6\0" \
++	"dtb_file=stm32f746/stm32f746-disco.dtb\0" \
++	"kernel_file=stm32f746/zImage\0" \
++	"dtb_addr=0xc0700000\0" \
++	"kernel_addr=0xc0008000\0" \
++	"netboot=tftp ${dtb_addr} ${dtb_file} && tftp ${kernel_addr} ${kernel_file} && bootz ${kernel_addr} - ${dtb_addr}\0" \
++	"spiboot=sf probe && sf read ${dtb_addr} 0 4000 && sf read ${kernel_addr} 10000 200000 && bootz ${kernel_addr} - ${dtb_addr}\0" \
++	"updatespi=sf probe && tftp ${dtb_addr} ${dtb_file} && sf erase 0 10000 && sf write ${dtb_addr} 0 ${filesize} && tftp ${kernel_addr} ${kernel_file} && sf erase 10000 200000 && sf write ${kernel_addr} 10000 ${filesize}\0" \
++	"conditionalboot=if test \"${button}\" = \"HIGH\"; then run updatespi; fi; run spiboot\0"
+ 
+ 
+ /*
