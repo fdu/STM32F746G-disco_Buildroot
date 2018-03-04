@@ -43,7 +43,7 @@ Changelog
 
 * 0.3
   * U-Boot 2018.03-rc3
-  * Linux 4.15.3
+  * Linux 4.15.7
   * Overview of board peripherals support
 
 * 0.2
