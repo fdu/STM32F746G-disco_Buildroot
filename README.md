@@ -6,26 +6,8 @@ The project is a set of patches and configuration files to build a bootloader an
 Board peripherals support
 -------------------------
 
-U-Boot:
- - DRAM
- - USART1 (STLink)
- - internal flash
- - SPI flash
- - ethernet
- - MMC
- - user button (low/high)
+See this [overview of board peripherals support](doc/Board_peripherals_support.md).
 
-Linux:
- - USART1 (STLink)
- - USART6 (Arduino connector)
- - I2C
- - SPI flash?
- - ethernet?
- - MMC?
- - display?
- - audio?
- - GPIO?
- - USB host?
 
 Build
 -----
@@ -60,12 +42,9 @@ Changelog
 ---------
 
 * 0.3
-  * Buildroot 2017.02.9
-  * GCC 6.3.0
   * U-Boot 2018.03-rc3
   * Linux 4.15.3
-  * Busybox 1.26.2
-  * OpenOCD 0.10.0
+  * Overview of board peripherals support
 
 * 0.2
   * Buildroot 2017.02.9
@@ -73,7 +52,6 @@ Changelog
   * U-Boot 2018.03-rc2
   * Linux 4.15.3
   * Busybox 1.26.2
-  * OpenOCD 0.10.0
 
 * 0.1
   * Buildroot 2017.02.9
