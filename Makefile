@@ -16,7 +16,7 @@ bootstrap:
 	cp $(dir_configs)/buildroot $(dir_buildroot)/.config
 
 build:
-	make -j10 -C $(dir_buildroot)
+	make -C $(dir_buildroot)
 	cp $(dir_buildroot)/output/images/stm32f746-disco.dtb ${dir_publish}/
 	cp $(dir_buildroot)/output/images/zImage ${dir_publish}/
 
